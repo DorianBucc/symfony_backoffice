@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/styles-register.css') }}">
+{% endblock %}
+{% block title %}{{"S'inscrire"|trans}}{% endblock %}
+
+{% block body %}
+    <h1>{{"S'inscrire"|trans}}</h1>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message | trans }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {{ form_start(registrationForm) }}
+        
+        {{ form_row(registrationForm.plainFirstName) }}
+        {{ form_row(registrationForm.plainName) }}
+        {{ form_row(registrationForm.email) }}
+        <div class="errors">
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+        {{ form_row(registrationForm.plainPassword) }}
+
+        <button type="submit" class="btn btn-primary">{{"S'inscrire"|trans}}</button>
+    {{ form_end(registrationForm) }}
+    <p>{{ "Vous avez déjà un compte ?"|trans}} <a href="{{ path('app_login') }}">{{"Connectez-vous ici"|trans}}</a></p>
+{% endblock %}
