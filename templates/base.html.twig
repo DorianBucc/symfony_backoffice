@@ -12,6 +12,13 @@
         {% endblock %}
     </head>
     <body>
+        <ul>
+            <li><a href="{{ path('product_index') }}">Produits</a></li>
+            <li><a href="{{ path('user_index') }}">Utilisateur</a></li>
+            <li><a href="{{ path('app_login') }}">Login</a></li>
+            <li><a href="{{ path('app_logout') }}">Logout</a></li>
+            <li><a href="{{ path('app_register') }}">Inscription</a></li>            
+        </ul>
         {% block body %}{% endblock %}
     </body>
 </html>

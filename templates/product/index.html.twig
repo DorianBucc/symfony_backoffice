@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des produits</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('product_edit', {'id': product.id}) }}">Modifier</a>
+                        <form method="post" action="{{ path('product_delete', {'id': product.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                            <button type="submit">Supprimer</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('product_new') }}">Ajouter un produit</a>
+    {% endif %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <form action="{{ path('product_export') }}" method="get">
+            <button type="submit">Exporter CSV</button>
+        </form>
+    {% endif %}
+
+{% endblock %}

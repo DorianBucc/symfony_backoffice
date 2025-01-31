@@ -41,7 +41,7 @@ class RegisterController extends AbstractController
                 $user,
                 $form->get('plainPassword')->getData()
             );            
-            $user->setRoles(["ROLE_USER"]);
+            $user->setRoles([$form->get('roles')->getData()] );
             $user->setPassword($hashedPassword);
             $user->setFirstName($form->get('plainFirstName')->getData());
             $user->setLastName($form->get('plainName')->getData());
