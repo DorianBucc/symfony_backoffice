@@ -17,10 +17,14 @@
             <td>{{ user.firstname }}</td>
             <td>{{ user.lastname }}</td>
             <td>
-                <a href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
+                {% if is_granted('edit', user) %}
+                    <a href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
+                {% endif %}
                 <form method="post" action="{{ path('user_delete', {'id': user.id}) }}">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                    <button type="submit">Supprimer</button>
+                    {% if is_granted('delete', user) %}
+                        <button type="submit">Supprimer</button>
+                    {% endif %}
                 </form>
             </td>
         </tr>

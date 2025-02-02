@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Security;
-
-use App\Entity\User;
+use App\Entity\Client;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserVoter extends Voter
+class ClientVoter extends Voter
 {
     const VIEW = 'view';
     const EDIT = 'edit';
@@ -20,7 +18,7 @@ class UserVoter extends Voter
         {
             return true;
         }
-        return in_array($attribute, [self::EDIT, self::DELETE], true) && $subject instanceof User;
+        return in_array($attribute, [self::EDIT, self::DELETE], true) && $subject instanceof Client;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -39,7 +37,7 @@ class UserVoter extends Voter
             case self::DELETE:
                 return in_array('ROLE_ADMIN', $user->getRoles(), true);
             case self::VIEW:
-                return in_array('ROLE_ADMIN', $user->getRoles(), true);
+                return in_array('ROLE_MANAGER', $user->getRoles(), true);
         }
         return false;
     }

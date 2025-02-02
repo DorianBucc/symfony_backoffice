@@ -13,14 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/products')]
-#[IsGranted('ROLE_ADMIN')]
+#[Route('/products')]
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'product_index')]
     public function index(ProductRepository $productRepository): Response
     {
-        $products = $productRepository->findBy([], ['price' => 'DESC']);  // Trier par prix décroissant
+        $this->denyAccessUnlessGranted("view");
+
+        $products = $productRepository->findAllSortedByPriceDesc();
         return $this->render('product/index.html.twig', [
             'products' => $products,
         ]);
@@ -29,6 +30,8 @@ class ProductController extends AbstractController
     #[Route('/new', name: 'product_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted("add");
+
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -45,6 +48,8 @@ class ProductController extends AbstractController
     #[Route('/{id}/edit', name: 'product_edit')]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted("edit");
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -59,6 +64,8 @@ class ProductController extends AbstractController
     #[Route('/{id}/delete', name: 'product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted("delete");
+
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager->remove($product);
             $entityManager->flush();

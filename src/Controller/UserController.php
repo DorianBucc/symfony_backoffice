@@ -13,13 +13,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/users')]
-#[IsGranted('ROLE_ADMIN')]
+#[Route('/users')]
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'user_index')]
+    #[Route('', name: 'user_index')]
     public function index(UserRepository $userRepository): Response
     {
+        $this->denyAccessUnlessGranted("view");
+
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
@@ -28,6 +29,8 @@ class UserController extends AbstractController
     #[Route('/new', name: 'user_new')]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        $this->denyAccessUnlessGranted("add");
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -49,6 +52,8 @@ class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'user_edit')]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted("edit", $user);
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -63,6 +68,9 @@ class UserController extends AbstractController
     #[Route('/{id}/delete', name: 'user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted("delete", $user);
+ 
+
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
@@ -70,4 +78,5 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('user_index');
     }
+
 }
