@@ -1,14 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Modifier le produit</h1>
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-6">Modifier le produit</h1>
 
-    {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.price) }}
-        <button type="submit">Modifier</button>
-    {{ form_end(form) }}
+        {{ form_start(form) }}
+            <div class="mb-4">
+                {{ form_row(form.name, {'attr': {'class': 'form-input block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'}}) }}
+            </div>
+            <div class="mb-4">
+                {{ form_row(form.description, {'attr': {'class': 'form-input block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'}}) }}
+            </div>
+            <div class="mb-4">
+                {{ form_row(form.price, {'attr': {'class': 'form-input block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'}}) }}
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200">Modifier</button>
+        {{ form_end(form) }}
 
-    <a href="{{ path('product_index') }}">Retour à la liste des produits</a>
+        <div class="mt-6">
+            <a href="{{ path('product_index') }}" class="text-blue-500 hover:text-blue-700">Retour à la liste des produits</a>
+        </div>
+    </div>
 {% endblock %}

@@ -1,32 +1,47 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    {% block stylesheets %}
+        <!-- Inclure Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+    {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        <ul>
-            <li><a href="{{ path('product_index') }}">Produits</a></li>
-            {% if is_granted('ROLE_ADMIN') %}
-                <li><a href="{{ path('user_index') }}">Utilisateur</a></li>
-            {% endif %}
-            <li><a href="{{ path('app_login') }}">Login</a></li>
-            <li><a href="{{ path('app_logout') }}">Logout</a></li>      
-        </ul>
-        {% for type, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ type }}">
-                    {{ message }}
-                </div>
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans h-screen">
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white p-4 h-full">
+            <ul>
+                <li><a href="{{ path('product_index') }}" class="block py-2 px-4 hover:bg-gray-600 rounded">Produits</a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ path('user_index') }}" class="block py-2 px-4 hover:bg-gray-600 rounded">Utilisateurs</a></li>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MANAGER') %}
+                    <li><a href="{{ path('app_client_index') }}" class="block py-2 px-4 hover:bg-gray-600 rounded">Clients</a></li>
+                {% endif %}
+                <li><a href="{{ path('app_login') }}" class="block py-2 px-4 hover:bg-gray-600 rounded">Login</a></li>
+                <li><a href="{{ path('app_logout') }}" class="block py-2 px-4 hover:bg-gray-600 rounded">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 overflow-auto">
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }} bg-{{ type == 'success' ? 'green' : type == 'danger' ? 'red' : 'yellow' }}-100 text-{{ type == 'success' ? 'green' : type == 'danger' ? 'red' : 'yellow' }}-800 p-4 rounded-lg m-4">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-        {% block body %}{% endblock %}
-    </body>
+
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</body>
 </html>

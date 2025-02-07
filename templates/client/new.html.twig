@@ -3,9 +3,15 @@
 {% block title %}New Client{% endblock %}
 
 {% block body %}
-    <h1>Create new Client</h1>
+    <div class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+        <h1 class="text-2xl font-bold mb-4">Create New Client</h1>
 
-    {{ include('client/_form.html.twig') }}
+        <div class="mb-4">
+            {{ include('client/_form.html.twig') }}
+        </div>
 
-    <a href="{{ path('app_client_index') }}">back to list</a>
+        <a href="{{ path('app_client_index') }}" class="inline-block bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600">
+            Back to List
+        </a>
+    </div>
 {% endblock %}

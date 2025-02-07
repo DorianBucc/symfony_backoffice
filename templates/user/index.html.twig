@@ -1,34 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Liste des utilisateurs</h1>
-    <table>
-        <tr>
-            <th>Email</th>
-            <th>Rôle</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Actions</th>
+    <h1 class="text-2xl font-bold mb-4">Liste des utilisateurs</h1>
+    <table class="w-full border-collapse border border-gray-300 shadow-md">
+        <tr class="bg-gray-100">
+            <th class="border border-gray-300 px-4 py-2">Email</th>
+            <th class="border border-gray-300 px-4 py-2">Rôle</th>
+            <th class="border border-gray-300 px-4 py-2">Nom</th>
+            <th class="border border-gray-300 px-4 py-2">Prénom</th>
+            <th class="border border-gray-300 px-4 py-2">Actions</th>
         </tr>
         {% for user in users %}
-        <tr>
-            <td>{{ user.email }}</td>
-            <td>{{ user.roles|join(', ') }}</td>
-            <td>{{ user.firstname }}</td>
-            <td>{{ user.lastname }}</td>
-            <td>
+        <tr class="border border-gray-300 hover:bg-gray-50">
+            <td class="border border-gray-300 px-4 py-2">{{ user.email }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ user.roles|join(', ') }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ user.firstname }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ user.lastname }}</td>
+            <td class="border border-gray-300 px-4 py-2 flex space-x-2">
                 {% if is_granted('edit', user) %}
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="text-blue-500 hover:underline">Modifier</a>
                 {% endif %}
-                <form method="post" action="{{ path('user_delete', {'id': user.id}) }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                    {% if is_granted('delete', user) %}
-                        <button type="submit">Supprimer</button>
-                    {% endif %}
-                </form>
+                {% if is_granted('delete', user) %}
+                    <form method="post" action="{{ path('user_delete', {'id': user.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                        <button type="submit" class="text-red-500 hover:underline">Supprimer</button>
+                    </form>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </table>
-    <a href="{{ path('user_new') }}">Ajouter un utilisateur</a>
+    <a href="{{ path('user_new') }}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Ajouter un utilisateur</a>
 {% endblock %}

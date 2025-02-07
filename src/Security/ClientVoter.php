@@ -31,13 +31,13 @@ class ClientVoter extends Voter
 
         switch ($attribute) {
             case self::ADD:
-                return in_array('ROLE_ADMIN', $user->getRoles(), true);
+                return in_array('ROLE_ADMIN', $user->getRoles(), true) || in_array('ROLE_MANAGER', $user->getRoles(), true);
             case self::EDIT:
-                return in_array('ROLE_ADMIN', $user->getRoles(), true);
+                return in_array('ROLE_ADMIN', $user->getRoles(), true) || in_array('ROLE_MANAGER', $user->getRoles(), true);
             case self::DELETE:
-                return in_array('ROLE_ADMIN', $user->getRoles(), true);
+                return in_array('ROLE_ADMIN', $user->getRoles(), true) || in_array('ROLE_MANAGER', $user->getRoles(), true);
             case self::VIEW:
-                return in_array('ROLE_MANAGER', $user->getRoles(), true);
+                return in_array('ROLE_ADMIN', $user->getRoles(), true) || in_array('ROLE_MANAGER', $user->getRoles(), true);
         }
         return false;
     }

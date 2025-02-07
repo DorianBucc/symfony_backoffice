@@ -2,23 +2,25 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\Client;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
 
 class ClientFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        
+        $faker = Factory::create('fr_FR'); 
+
         for ($i = 1; $i <= 10; $i++) {
             $client = new Client();
-            $client->setFirstname('Prénom'.$i);
-            $client->setLastname('Nom'.$i);
-            $client->setEmail('client'.$i.'@mail.com');
-            $client->setPhoneNumber('0601020304');
-            $client->setAddress('Adresse '.$i);
+            $client->setFirstname($faker->firstName()); 
+            $client->setLastname($faker->lastName()); 
+            $client->setEmail($faker->unique()->safeEmail()); 
+            $client->setPhoneNumber($faker->phoneNumber()); 
+            $client->setAddress($faker->address()); 
 
             $manager->persist($client);
         }

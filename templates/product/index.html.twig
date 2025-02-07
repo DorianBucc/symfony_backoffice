@@ -1,44 +1,50 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Liste des produits</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Description</th>
-                <th>Prix</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for product in products %}
-            <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.description }}</td>
-                <td>{{ product.price }}</td>
-                <td>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('product_edit', {'id': product.id}) }}">Modifier</a>
-                        <form method="post" action="{{ path('product_delete', {'id': product.id}) }}">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-                            <button type="submit">Supprimer</button>
-                        </form>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-6">Liste des produits</h1>
+        
+        <table class="min-w-full table-auto border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+            <thead>
+                <tr class="bg-gray-800 text-white">
+                    <th class="px-4 py-2 text-left">Nom</th>
+                    <th class="px-4 py-2 text-left">Description</th>
+                    <th class="px-4 py-2 text-left">Prix</th>
+                    <th class="px-4 py-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr class="border-b">
+                        <td class="px-4 py-2">{{ product.name }}</td>
+                        <td class="px-4 py-2">{{ product.description }}</td>
+                        <td class="px-4 py-2">{{ product.price }}</td>
+                        <td class="px-4 py-2">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('product_edit', {'id': product.id}) }}" class="text-blue-500 hover:text-blue-700 mr-4">Modifier</a>
+                                <form method="post" action="{{ path('product_delete', {'id': product.id}) }}" class="inline-block">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                                    <button type="submit" class="text-red-500 hover:text-red-700">Supprimer</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('product_new') }}">Ajouter un produit</a>
-    {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="mt-6">
+                <a href="{{ path('product_new') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Ajouter un produit</a>
+            </div>
+        {% endif %}
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <form action="{{ path('product_export') }}" method="get">
-            <button type="submit">Exporter CSV</button>
-        </form>
-    {% endif %}
-
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="mt-6">
+                <form action="{{ path('product_export') }}" method="get" class="inline-block">
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Exporter CSV</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
