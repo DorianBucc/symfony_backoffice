@@ -30,7 +30,7 @@ Le test du service d'exportation fonctionne à moitié:
 2. Installer PHP >= 8.2 et Composer (Sur votre machine utiliser XAMPP pour windows, MAMP pour mac ou LAMP pour linux bien prendre la version PHP 8.2)
 3. Installer les dépendances du projet avec la commande `composer install`
 4. Modifier le fichier `.env` à la racine du projet et ajouter la configuration de votre base de données
-(default: `DATABASE_URL="mysql://root:root@127.0.0.1:3306/drinks_bdd?serverVersion=8.0.39&charset=utf8mb4"`)
+(default: `DATABASE_URL="mysql://root:root@127.0.0.1:3306/app?serverVersion=8.0.39&charset=utf8mb4"`)
 5. Créer la base de données avec la commande `php bin/console doctrine:database:create`
 6. Créer les tables de la base de donnée avec la commande `php bin/console doctrine:schema:create`
 6. Charger les fixture dans la base de donnée avec la commande `php bin/console doctrine:fixtures:load` et `yes`
