@@ -99,7 +99,8 @@
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
-        "phpunit/phpunit": "^9.5",
+        "mockery/mockery": "^1.6",
+        "phpunit/phpunit": "^9.6",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",
         "symfony/debug-bundle": "7.1.*",

@@ -2,37 +2,36 @@
 
 namespace App\Service;
 
-use App\Repository\ProductRepository;
+use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductExportService
 {
-    private $productRepository;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->productRepository = $productRepository;
+        $this->entityManager = $entityManager;
     }
 
     public function export(): Response
     {
-        $products = $this->productRepository->findAll();
-
-        $response = new StreamedResponse(function () use ($products) {
-            $handle = fopen('php://output', 'w+');
-            // En-tête du CSV
-            fputcsv($handle, ['Name', 'Description', 'Price']);
-            // Données des produits
-            foreach ($products as $product) {
-                fputcsv($handle, [$product->getName(), $product->getDescription(), $product->getPrice()]);
-            }
-            fclose($handle);
-        });
-
+        $products = $this->entityManager->getRepository(Product::class)->findAll();
+        
+        $csvData = "name,description,price\n";
+        foreach ($products as $product) {
+            $csvData .= sprintf("%s,%s,%s\n", 
+                $product->getName(), 
+                str_replace(",", " ", $product->getDescription()), 
+                $product->getPrice()
+            );
+        }
+        
+        $response = new Response($csvData);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="products.csv"');
-
+        
         return $response;
     }
 }

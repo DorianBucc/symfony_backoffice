@@ -41,9 +41,7 @@
 
         {% if is_granted('ROLE_ADMIN') %}
             <div class="mt-6">
-                <form action="{{ path('product_export') }}" method="get" class="inline-block">
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Exporter CSV</button>
-                </form>
+                <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="{{ path('product_export') }}" class="btn btn-primary">Exporter en CSV</a>
             </div>
         {% endif %}
     </div>
